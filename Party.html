@@ -5,8 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" href="style.css">
-    
+    <link rel="stylesheet" href="Party.css">
 </head>
 
 <body>
@@ -110,5 +109,122 @@
     <script src="scriptgg.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+        const host = "http://localhost:8000"
+        const vue_home = new Vue({
+            el: '#app',
+            vuetify: new Vuetify({
+                theme:{dark : true}
+            }),
+            data: () => {
+                return ({
+                    name: 'Vue',
+                    list: [],
+                    form: {},
+                    search: '',
+                    headers: [
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '                          ',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: '',
+                        },
+                        {
+                            text: '',
+                            value: 'action',
+                        },
+                    ]
+                })
+            },
+            async created() {
+                await this.load()
+            },
+            methods: {
+                async load() {
+                    this.form = {}
+                    await axios.get(`${host}/users`).then((res) => {
+                        this.list = res.data
+                    })
+                },
+                async remove(user_id) {
+                    let confirm = window.confirm("U want to delete");
+                    if (confirm) {
+                        await axios.delete(`${host}/users/${user_id}`).then(async (res) => {
+                            await this.load()
+                            let result = res.data
+                            alert(result.message)
+                        });
+                    }
+                    // await axios.delete(`${host}/users/${user_id}`).then(async (res) => {
+                    //     await this.load()
+                    // })
+                },
+
+                async update(user_id) {
+                    let check = window.confirm('U want to edit?')
+                    if (check) {
+                        await axios.put(`${host}/users/${user_id}`, this.form).then(async (res) => {
+                            alert(res.data.message)
+                        })
+                    }
+                    await this.load()
+                },
+
+                async create() {
+                    await axios.post(`${host}/users`, this.form).then(async (res) => {
+                        await this.load()
+                    })
+                },
+            },
+        })
+    </script>
+        
+    </script>
 </body>
+
 </html>
